@@ -1,7 +1,6 @@
 # Sporty Security Take-Home Assignment
 
-## Report
-[Download the Security Assessment Report](./Report.pdf)
+## Reports
 
 ## POCs
 
