@@ -1,0 +1,21 @@
+Target: OWASP Juice Shop — complaints functionality Severity: High CVSS: 8.1
+Description
+The complaints functionality trusts a client-controlled UserId rather than deriving the ownership relationship from the
+authenticated session. Supplied evidence demonstrates both cross-user write and cross-user read behavior.
+Impact
+An authenticated low-privileged user can create or access complaint records in the context of another user. This
+breaks user isolation and enables unauthorized disclosure and modification of complaint data.
+Step-by-Step Reproduction
+1. Authenticate as an ordinary Juice Shop customer.
+2. Capture the complaints request in Burp.
+3. Modify the client-controlled UserId while keeping the attacker session unchanged.
+4. Replay the request and observe a complaint created for another user.
+5. Issue the corresponding read request with another user’s identifier and observe that user’s complaint data.
+6. Confirm the server does not enforce ownership from the authenticated principal.
+Remediation
+Derive ownership from the authenticated identity on the server. Authorize every complaint read/write against the
+current principal and reject mismatched ownership. Never treat a client-supplied UserId as a trusted authorization
+decision.
+Tradecraft / Methodology
+For BOLA testing, keep the session fixed and mutate only the object or ownership identifier. Test both read and write
+operations because an API can incorrectly protect one while exposing the other.
